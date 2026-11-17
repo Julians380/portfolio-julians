@@ -1,0 +1,86 @@
+---
+import { TAGS, type Tag as TagData } from '@/data/tags';
+import Tag from './Tag.astro';
+
+interface StackGroup {
+    category: string
+    items: TagData[]
+}
+
+const STACK: StackGroup[] = [
+    {
+        category: 'Lenguajes',
+        items: [TAGS.CSharp, TAGS.TypeScript, TAGS.JavaScript, TAGS.PHP, TAGS.Python, TAGS.Go, TAGS.SQL, TAGS.Razor],
+    },
+    {
+        category: 'Frontend',
+        items: [TAGS.Angular, TAGS.React, TAGS.Vue, TAGS.Tailwind, TAGS.Sass],
+    },
+    {
+        category: 'Backend',
+        items: [TAGS.DotNet, TAGS.AspNet, TAGS.Laravel, TAGS.ApiRest],
+    },
+    {
+        category: 'Bases de datos',
+        items: [TAGS.SQLServer, TAGS.PostgreSQL, TAGS.MySQL],
+    },
+    {
+        category: 'Cloud y despliegue',
+        items: [TAGS.Azure, TAGS.IIS, TAGS.Docker, TAGS.GoogleCloudStorage, TAGS.Cloudflare],
+    },
+]
+---
+
+<dl class="stack">
+    {
+        STACK.map(({ category, items }) => (
+            <div class="stack__row">
+                <dt class="stack__category">{category}</dt>
+                <dd class="stack__items">
+                    <ul class="stack__list">
+                        {items.map((item) => (
+                            <li>
+                                <Tag tag={item} />
+                            </li>
+                        ))}
+                    </ul>
+                </dd>
+            </div>
+        ))
+    }
+</dl>
+
+<style>
+    .stack {
+        margin: 0;
+        border-bottom: 1px solid var(--color-border-soft);
+    }
+
+    .stack__row {
+        display: grid;
+        gap: 8px;
+        padding: 14px 0;
+        border-top: 1px solid var(--color-border-soft);
+    }
+
+    .stack__category {
+        color: var(--color-text-subtle);
+    }
+
+    .stack__items {
+        margin: 0;
+    }
+
+    .stack__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+    }
+
+    @media (min-width: 640px) {
+        .stack__row {
+            grid-template-columns: 170px minmax(0, 1fr);
+            gap: 24px;
+        }
+    }
+</style>

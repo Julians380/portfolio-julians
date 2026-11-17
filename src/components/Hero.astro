@@ -1,0 +1,310 @@
+---
+import Badge from './Badge.astro';
+import Divider from './Divider.astro';
+import GithubIcon from './icons/Github.astro';
+import LinkedinIcon from './icons/Linkedin.astro';
+import LinkInLine from './LinkInLine.astro';
+import MailIcon from './icons/Mail.astro';
+import SectionContainer from './SectionContainer.astro';
+
+const SOCIALS = [
+    {
+        name: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/julianslanderas/',
+        icon: LinkedinIcon,
+    },
+    {
+        name: 'GitHub',
+        url: 'https://github.com/Julians380',
+        icon: GithubIcon,
+    },
+    {
+        name: 'Email',
+        url: 'mailto:julianslanderas@gmail.com',
+        icon: MailIcon,
+    },
+]
+
+const HIGHLIGHTS = [
+    // {
+    //     label: 'Ahora',
+    //     value: 'Full Stack en Sertech Perú',
+    // },
+    {
+        label: 'Stack',
+        stack: [
+            { name: 'Angular', accent: 'red' },
+            { name: '.NET', accent: 'yellow' },
+            { name: 'SQL Server', accent: 'blue' },
+        ],
+    },
+    {
+        label: 'Formación',
+        value: 'Ingeniero de Sistemas',
+    },
+]
+---
+
+<div class="hero">
+    <SectionContainer>
+        <header id="inicio" class="hero__inner">
+            <div class="hero__top">
+                <div class="hero__intro">
+                    <a class="hero__badge" href="https://www.linkedin.com/in/julianslanderas/" target="_blank" rel="noopener noreferrer">
+                        <Badge>Disponible para nuevos proyectos</Badge>
+                    </a>
+                    <h1 class="hero__title">Julians <em class="hero__title-accent">Landeras</em></h1>
+                </div>
+                <figure class="hero__figure">
+                    <img
+                        class="hero__photo"
+                        src="/me.webp"
+                        alt="Fotografía de Julians Landeras"
+                        width="220"
+                        height="220"
+                    />
+                    <figcaption class="hero__location">
+                        <span class="hero__location-dot" aria-hidden="true"></span>
+                        Perú
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="hero__divider">
+                <Divider tricolor />
+            </div>
+
+            <ul class="hero__socials">
+                {
+                    SOCIALS.map(({ name, url, icon: Icon }) => (
+                        <li>
+                            <LinkInLine href={url}>
+                                <Icon class="hero__social-icon" />
+                                {name}
+                            </LinkInLine>
+                        </li>
+                    ))
+                }
+            </ul>
+
+            <p class="hero__lead">
+                Ingeniero de Sistemas y desarrollador Full Stack
+            </p>
+            <p class="hero__summary">
+                &gt; 2 años de experiencia optimizando procesos en gestión pública y construyendo sistemas escalables para empresas
+            </p>
+
+            <dl class="hero__highlights">
+                {
+                    HIGHLIGHTS.map(({ label, value, stack }) => (
+                        <div class="hero__highlight">
+                            <dt class="hero__highlight-label">{label}</dt>
+                            {stack ? (
+                                <dd class="hero__highlight-value hero__highlight-value--stack">
+                                    {stack.map((tech) => (
+                                        <span class="hero__tech">
+                                            <span class={`hero__tech-dot hero__tech-dot--${tech.accent}`} aria-hidden="true" />
+                                            {tech.name}
+                                        </span>
+                                    ))}
+                                </dd>
+                            ) : (
+                                <dd class="hero__highlight-value">{value}</dd>
+                            )}
+                        </div>
+                    ))
+                }
+            </dl>
+        </header>
+    </SectionContainer>
+</div>
+
+<style>
+    .hero {
+        background: var(--color-bg-deep);
+    }
+
+    .hero__inner {
+        padding: 40px 0 64px;
+    }
+
+    .hero__top {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .hero__intro {
+        min-width: 0;
+    }
+
+    .hero__badge {
+        display: inline-block;
+        margin-bottom: 24px;
+    }
+
+    .hero__title {
+        font-family: var(--font-serif);
+        font-weight: 400;
+        font-size: clamp(3.25rem, 14vw, 6.5rem);
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+    }
+
+    .hero__title-accent {
+        font-style: italic;
+    }
+
+    .hero__figure {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero__photo {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border: 1px solid var(--color-border-deep);
+        border-radius: 10px;
+        background: var(--color-bg);
+    }
+
+    .hero__location {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--color-text-muted);
+    }
+
+    .hero__location-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--color-red);
+    }
+
+    .hero__divider {
+        margin: 28px 0 16px;
+    }
+
+    .hero__socials {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 20px;
+    }
+
+    .hero__social-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 2px;
+    }
+
+    .hero__lead {
+        max-width: 760px;
+        margin-top: 32px;
+        font-family: var(--font-serif);
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+
+    .hero__summary {
+        max-width: 760px;
+        margin-top: 20px;
+        font-family: var(--font-serif);
+        font-size: 19px;
+        line-height: 1.4;
+        color: var(--color-text-muted);
+    }
+
+    .hero__highlights {
+        display: grid;
+        gap: 24px;
+        margin: 48px 0 0;
+        padding-top: 28px;
+        border-top: 1px solid var(--color-border-deep);
+    }
+
+    .hero__highlight {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .hero__highlight-label {
+        color: var(--color-text-subtle);
+    }
+
+    .hero__highlight-value {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .hero__highlight-value--stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .hero__tech {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .hero__tech-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .hero__tech-dot--red {
+        background: var(--color-red);
+    }
+
+    .hero__tech-dot--yellow {
+        background: var(--color-yellow);
+    }
+
+    .hero__tech-dot--blue {
+        background: var(--color-blue);
+    }
+
+    @media (min-width: 640px) {
+        .hero__highlights {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (min-width: 768px) {
+        .hero__inner {
+            padding: 56px 0 96px;
+        }
+
+        .hero__top {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .hero__photo {
+            width: 220px;
+            height: 220px;
+        }
+
+        .hero__lead {
+            margin-top: 40px;
+            font-size: 30px;
+        }
+
+        .hero__summary {
+            font-size: 22px;
+        }
+
+        .hero__highlights {
+            margin-top: 64px;
+        }
+    }
+</style>

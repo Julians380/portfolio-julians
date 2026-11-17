@@ -1,0 +1,72 @@
+---
+import GithubIcon from './icons/Github.astro';
+import LinkButton from './LinkButton.astro';
+import LinkedinIcon from './icons/Linkedin.astro';
+import MailIcon from './icons/Mail.astro';
+
+const CONTACT_LINKS = [
+    {
+        name: 'julianslanderas@gmail.com',
+        url: 'mailto:julianslanderas@gmail.com',
+        icon: MailIcon,
+    },
+    {
+        name: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/julianslanderas/',
+        icon: LinkedinIcon,
+    },
+    {
+        name: 'GitHub',
+        url: 'https://github.com/Julians380',
+        icon: GithubIcon,
+    },
+]
+---
+
+<div class="contact">
+    <p class="contact__title">¿Tienes un proyecto en mente? <em>Hablemos.</em></p>
+    <ul class="contact__links">
+        {
+            CONTACT_LINKS.map(({ name, url, icon: Icon }) => (
+                <li>
+                    <LinkButton href={url}>
+                        <Icon class="contact__icon" />
+                        {name}
+                    </LinkButton>
+                </li>
+            ))
+        }
+    </ul>
+</div>
+
+<style>
+    .contact {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .contact__title {
+        font-family: var(--font-serif);
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    .contact__links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .contact__icon {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+    }
+
+    @media (min-width: 768px) {
+        .contact__title {
+            font-size: 34px;
+        }
+    }
+</style>

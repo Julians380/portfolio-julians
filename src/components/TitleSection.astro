@@ -1,0 +1,58 @@
+---
+type Accent = 'red' | 'yellow' | 'blue'
+
+interface Props {
+    number: string
+    title: string
+    accent: Accent
+}
+const { number, title, accent } = Astro.props
+---
+
+<h2 class="title-section">
+    <span class={`title-section__number title-section__number--${accent}`} aria-hidden="true">{number}</span>
+    <span class="title-section__label">{title}</span>
+</h2>
+
+<style>
+    .title-section {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+    .title-section__number {
+        font-family: var(--font-serif);
+        font-size: 40px;
+        line-height: 1;
+    }
+
+    .title-section__number--red {
+        color: var(--color-red);
+    }
+
+    .title-section__number--yellow {
+        color: var(--color-yellow);
+    }
+
+    .title-section__number--blue {
+        color: var(--color-blue);
+    }
+
+    .title-section__label {
+        color: var(--color-text-muted);
+    }
+
+    @media (min-width: 768px) {
+        .title-section {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .title-section__number {
+            font-size: 48px;
+        }
+    }
+</style>

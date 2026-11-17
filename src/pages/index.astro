@@ -1,0 +1,37 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+import Contact from '@/components/Contact.astro';
+import Experience from '@/components/Experience.astro';
+import Hero from '@/components/Hero.astro';
+import Projects from '@/components/Projects.astro';
+import Section from '@/components/Section.astro';
+import SectionContainer from '@/components/SectionContainer.astro';
+import Stack from '@/components/Stack.astro';
+---
+
+<Layout
+	title="Julians Landeras — Ingeniero de Sistemas"
+	description="Portafolio de Julians Landeras, Ingeniero de Sistemas, Perú."
+>
+	<main>
+		<Hero />
+		<SectionContainer>
+			<Section id="proyectos" number="01" title="Proyectos" accent="red">
+				<Projects />
+			</Section>
+
+			<Section id="stack" number="02" title="Stack" accent="yellow">
+				<Stack />
+			</Section>
+
+			<Section id="experiencia" number="03" title="Experiencia" accent="blue">
+				<Experience />
+			</Section>
+
+			<Section id="contacto" number="04" title="Contacto" accent="red">
+				<Contact />
+			</Section>
+		</SectionContainer>
+	</main>
+</Layout>

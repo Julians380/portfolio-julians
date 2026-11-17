@@ -1,0 +1,36 @@
+---
+interface Props {
+    href: string
+}
+const { href } = Astro.props
+const isExternal = href.startsWith('http')
+---
+
+<a
+    class="link-button"
+    href={href}
+    target={isExternal ? '_blank' : undefined}
+    rel={isExternal ? 'noopener noreferrer' : undefined}
+>
+    <slot />
+    <span aria-hidden="true">↗</span>
+</a>
+
+<style>
+    .link-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 44px;
+        padding: 12px 18px;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        word-break: break-all;
+        transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+    }
+
+    .link-button:hover {
+        border-color: var(--color-yellow);
+        background: var(--color-surface);
+    }
+</style>

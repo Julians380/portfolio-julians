@@ -1,0 +1,39 @@
+---
+interface Props {
+    href: string
+    external?: boolean
+}
+const { href, external = true } = Astro.props
+---
+
+<a
+    class="link-in-line"
+    href={href}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener noreferrer' : undefined}
+>
+    <slot />
+    <span class="link-in-line__arrow" aria-hidden="true">↗</span>
+</a>
+
+<style>
+    .link-in-line {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 32px;
+        color: var(--color-text-muted);
+    }
+
+    .link-in-line:hover {
+        color: var(--color-yellow);
+    }
+
+    .link-in-line__arrow {
+        transition: transform 0.2s;
+    }
+
+    .link-in-line:hover .link-in-line__arrow {
+        transform: translate(2px, -2px);
+    }
+</style>

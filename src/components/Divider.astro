@@ -1,0 +1,67 @@
+---
+type Accent = 'red' | 'yellow' | 'blue'
+
+interface Props {
+    accent?: Accent
+    tricolor?: boolean
+}
+const { accent = 'red', tricolor = false } = Astro.props
+---
+
+<div class:list={['divider', { 'divider--tricolor': tricolor }]} aria-hidden="true">
+    {
+        tricolor ? (
+            <>
+                <span class="divider__mark divider__mark--red" />
+                <span class="divider__mark divider__mark--short divider__mark--yellow" />
+                <span class="divider__mark divider__mark--short divider__mark--blue" />
+            </>
+        ) : (
+            <span class={`divider__mark divider__mark--${accent}`} />
+        )
+    }
+    <span class="divider__line" />
+</div>
+
+<style>
+    .divider {
+        display: flex;
+        align-items: center;
+    }
+
+    .divider--tricolor {
+        gap: 6px;
+    }
+
+    .divider__mark {
+        flex: 0 0 28px;
+        height: 3px;
+    }
+
+    .divider__mark--short {
+        flex-basis: 14px;
+    }
+
+    .divider__mark--red {
+        background: var(--color-red);
+    }
+
+    .divider__mark--yellow {
+        background: var(--color-yellow);
+    }
+
+    .divider__mark--blue {
+        background: var(--color-blue);
+    }
+
+    .divider__line {
+        flex: 1;
+        height: 1px;
+        background: var(--color-border);
+    }
+
+    .divider--tricolor .divider__line {
+        margin-left: 6px;
+        background: var(--color-border-deep);
+    }
+</style>

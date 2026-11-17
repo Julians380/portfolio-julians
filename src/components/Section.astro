@@ -1,0 +1,48 @@
+---
+import Divider from './Divider.astro';
+import TitleSection from './TitleSection.astro';
+
+type Accent = 'red' | 'yellow' | 'blue'
+
+interface Props {
+    id: string
+    number: string
+    title: string
+    accent: Accent
+}
+const { id, number, title, accent } = Astro.props
+---
+
+<section id={id} class="section">
+    <Divider accent={accent} />
+    <div class="section__body">
+        <TitleSection number={number} title={title} accent={accent} />
+        <div class="section__content">
+            <slot />
+        </div>
+    </div>
+</section>
+
+<style>
+    .section {
+        margin-top: var(--section-gap);
+        scroll-margin-top: 72px;
+    }
+
+    .section__body {
+        display: grid;
+        gap: 24px;
+        padding-top: 28px;
+    }
+
+    .section__content {
+        min-width: 0;
+    }
+
+    @media (min-width: 768px) {
+        .section__body {
+            grid-template-columns: 180px minmax(0, 1fr);
+            gap: 32px;
+        }
+    }
+</style>

@@ -1,0 +1,29 @@
+---
+import type { Tag } from '@/data/tags';
+
+interface Props {
+    tag: Tag
+}
+const { tag } = Astro.props
+const { name, icon: Icon } = tag
+---
+
+<span class="tag">
+    {Icon && <Icon class="tag__icon" />}
+    {name}
+</span>
+
+<style>
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .tag__icon {
+        flex-shrink: 0;
+        width: 14px;
+        height: 14px;
+        color: var(--color-text-subtle);
+    }
+</style>

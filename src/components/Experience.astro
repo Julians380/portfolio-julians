@@ -1,0 +1,50 @@
+---
+import TimelineItem from './TimelineItem.astro';
+
+const EXPERIENCE = [
+    {
+        date: 'Abr 2025 – actual',
+        company: 'Sertech Perú',
+        title: 'Desarrollador de software Full Stack',
+        description:
+            'Apps web multitenant con Angular, React y .NET sobre SQL Server · Sistemas de gestión operativa, planillas y reclutamiento · Facturación electrónica integrada a SUNAT · Cálculo automático de CTS, gratificaciones y liquidaciones · Despliegues en IIS y Azure · Migración de archivos a Google Cloud Storage · Definición de alcance y arquitectura con clientes',
+    },
+    {
+        date: 'Ago 2020 – Mar 2025',
+        company: 'Municipalidad Distrital de Coishco',
+        title: 'Programador de Aplicaciones Informáticas',
+        description:
+            'Sistema de administración tributaria · Website institucional: +91% SEO y +90% accesibilidad · Sistema de agua potable · Liderazgo del área de Tecnología, Comunicaciones e Informática · Red interna y servidor proxy · Transformación Digital con la PCM · Portal de Transparencia y gob.pe',
+    },
+    {
+        date: 'Abr 2019 – Ago 2019',
+        company: 'Universidad San Pedro',
+        title: 'Pasante',
+        description:
+            'Mantenimiento de equipos del campus · Administración de la infraestructura tecnológica',
+    },
+    {
+        date: 'Ene 2019 – Feb 2019',
+        company: 'Municipalidad Distrital de Coishco',
+        title: 'Apoyo Operativo',
+        description:
+            'Servicio técnico a equipos del palacio municipal · Primer sitio web institucional',
+    },
+]
+---
+
+<ol class="experience">
+    {
+        EXPERIENCE.map(({ date, company, title, description }) => (
+            <li class="experience__item">
+                <TimelineItem date={date} title={company} subtitle={title} description={description} />
+            </li>
+        ))
+    }
+</ol>
+
+<style>
+    .experience__item + .experience__item {
+        border-top: 1px solid var(--color-border-soft);
+    }
+</style>

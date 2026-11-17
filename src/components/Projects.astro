@@ -1,0 +1,308 @@
+---
+import ChevronLeft from './icons/ChevronLeft.astro';
+import ChevronRight from './icons/ChevronRight.astro';
+import ProjectCard from './ProjectCard.astro';
+import { TAGS, type Tag } from '@/data/tags';
+
+interface Project {
+    tag: string
+    stack: Tag[]
+    title: string
+    description: string
+    client?: string
+    link?: string
+    github?: string
+    image?: string
+}
+
+const PROJECTS: Project[] = [
+    // {
+    //     tag: 'ERP · multitenant',
+    //     stack: [TAGS.Angular, TAGS.DotNet, TAGS.SQLServer],
+    //     title: 'Sistema de gestión operativa',
+    //     description:
+    //         'Cotizaciones, órdenes e informes de trabajo, personal, almacén, compras y facturación electrónica integrada a SUNAT.',
+    //     client: 'Proyecto para cliente · Sertech Perú',
+    // },
+    // {
+    //     tag: 'planillas',
+    //     stack: [TAGS.DotNet, TAGS.SQLServer],
+    //     title: 'Sistema de planillas',
+    //     description:
+    //         'Trabajadores, tareo de asistencia y subsidios; cálculo automático de CTS, gratificaciones y liquidaciones, con asientos contables y reportes para bancos.',
+    //     client: 'Proyecto para cliente · Sertech Perú',
+    // },
+    {
+        tag: 'Web',
+        stack: [TAGS.Vue, TAGS.DotNet],
+        title: 'Acortador de link',
+        description:
+            'Aplicación web para convertir enlaces largos en links cortos y fáciles de compartir, con frontend en Vue y API en .NET.',
+        link: 'https://url.julians-dev.com/',
+        image: '/projects/coco2.png',
+    },
+    {
+        tag: 'CLI',
+        stack: [TAGS.Go],
+        title: 'CLI - Empaquetador CFZ',
+        description:
+            'CLI para empaquetacion de archivos. Con comandos accesibles compara los cambios de una rama con respecto a main, compila y copia junto con su jerarquia de carpetas.',
+        github: 'https://github.com/Julians380/cfz-cli',
+        image: '/projects/cli_cfz.webp',
+    },
+    {
+        tag: 'Web',
+        stack: [TAGS.HTML, TAGS.Bootstrap, TAGS.JavaScript],
+        title: 'Website — Municipalidad de Coishco',
+        description:
+            'Lading Page institucional responsive: SEO mejorado en 91% y accesibilidad en 90%.',
+        link: 'http://www.municoishco.gob.pe/',
+        image: '/projects/website_mdc.webp',
+    },
+    {
+        tag: 'Movil',
+        stack: [TAGS.Kotlin, TAGS.Python, TAGS.TensorFlow],
+        title: 'Valoración del riesgo de depresión por voz',
+        description:
+            'App móvil con una red neuronal convolucional que detecta signos de depresión en audios de voz.',
+        github: 'https://github.com/Julians380/DepressAlert-AppMobile',
+        image: '/projects/DepressAlert.webp',
+    },
+]
+
+const total = String(PROJECTS.length).padStart(2, '0')
+---
+
+<div class="projects" data-projects>
+    <div class="projects__toolbar">
+        <p class="projects__counter" aria-live="polite">
+            <span class="projects__current" data-projects-current>01</span> / {total}
+        </p>
+        <div class="projects__controls">
+            <button class="projects__button" type="button" aria-label="Proyecto anterior" data-projects-prev disabled>
+                <ChevronLeft />
+            </button>
+            <button class="projects__button" type="button" aria-label="Proyecto siguiente" data-projects-next>
+                <ChevronRight />
+            </button>
+        </div>
+    </div>
+
+    <ul class="projects__track" data-projects-track aria-label="Proyectos" tabindex="0">
+        {
+            PROJECTS.map((project) => (
+                <li class="projects__slide">
+                    <ProjectCard {...project} />
+                </li>
+            ))
+        }
+    </ul>
+
+    <div class="projects__dots">
+        {
+            PROJECTS.map((_, index) => (
+                <button
+                    class:list={['projects__dot', { 'projects__dot--active': index === 0 }]}
+                    type="button"
+                    aria-label={`Ir a la posición ${index + 1}`}
+                    data-projects-dot={index}
+                >
+                    <span class="projects__dot-bar" />
+                </button>
+            ))
+        }
+    </div>
+</div>
+
+<script>
+    const pad = (value: number) => String(value).padStart(2, '0')
+
+    document.querySelectorAll<HTMLElement>('[data-projects]').forEach((carousel) => {
+        const track = carousel.querySelector<HTMLElement>('[data-projects-track]')
+        const prev = carousel.querySelector<HTMLButtonElement>('[data-projects-prev]')
+        const next = carousel.querySelector<HTMLButtonElement>('[data-projects-next]')
+        const current = carousel.querySelector<HTMLElement>('[data-projects-current]')
+        const dots = carousel.querySelectorAll<HTMLButtonElement>('[data-projects-dot]')
+
+        if (!track || !prev || !next || !current) return
+
+        const slides = track.children
+        const total = slides.length
+
+        const getStep = () => {
+            if (slides.length < 2) return track.clientWidth
+            return (slides[1] as HTMLElement).offsetLeft - (slides[0] as HTMLElement).offsetLeft
+        }
+
+        const getPerView = () => Math.max(1, Math.round(track.clientWidth / getStep()))
+
+        const getMaxIndex = () => Math.max(0, total - getPerView())
+
+        const getIndex = () => Math.min(getMaxIndex(), Math.round(track.scrollLeft / getStep()))
+
+        const goTo = (index: number) => {
+            const target = Math.max(0, Math.min(getMaxIndex(), index))
+            track.scrollTo({ left: target * getStep(), behavior: 'smooth' })
+        }
+
+        const update = () => {
+            const index = getIndex()
+            const perView = getPerView()
+            const maxIndex = getMaxIndex()
+            const last = Math.min(total, index + perView)
+
+            current.textContent = perView > 1 ? `${pad(index + 1)}–${pad(last)}` : pad(index + 1)
+            prev.disabled = index === 0
+            next.disabled = index >= maxIndex
+
+            dots.forEach((dot, dotIndex) => {
+                dot.hidden = dotIndex > maxIndex
+                dot.classList.toggle('projects__dot--active', dotIndex === index)
+                if (dotIndex === index) {
+                    dot.setAttribute('aria-current', 'true')
+                } else {
+                    dot.removeAttribute('aria-current')
+                }
+            })
+        }
+
+        prev.addEventListener('click', () => goTo(getIndex() - 1))
+        next.addEventListener('click', () => goTo(getIndex() + 1))
+        dots.forEach((dot) => {
+            dot.addEventListener('click', () => goTo(Number(dot.dataset.projectsDot)))
+        })
+
+        track.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') goTo(getIndex() - 1)
+            if (event.key === 'ArrowRight') goTo(getIndex() + 1)
+        })
+
+        let frame = 0
+        track.addEventListener('scroll', () => {
+            cancelAnimationFrame(frame)
+            frame = requestAnimationFrame(update)
+        }, { passive: true })
+
+        window.addEventListener('resize', update)
+        update()
+    })
+</script>
+
+<style>
+    .projects {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .projects__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .projects__counter {
+        color: var(--color-text-muted);
+    }
+
+    .projects__current {
+        font-weight: 700;
+        color: var(--color-text);
+    }
+
+    .projects__controls {
+        display: flex;
+        gap: 8px;
+    }
+
+    .projects__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        background: var(--color-surface);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: border-color 0.2s, color 0.2s;
+    }
+
+    .projects__button:hover:not(:disabled) {
+        border-color: var(--color-yellow);
+        color: var(--color-yellow);
+    }
+
+    .projects__button:disabled {
+        background: transparent;
+        color: var(--color-text-disabled);
+        cursor: default;
+    }
+
+    .projects__track {
+        display: flex;
+        gap: 24px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+    }
+
+    .projects__track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .projects__track:focus-visible {
+        outline: 2px solid var(--color-yellow);
+        outline-offset: 4px;
+    }
+
+    .projects__slide {
+        flex: 0 0 100%;
+        min-width: 0;
+        scroll-snap-align: start;
+    }
+
+    .projects__dots {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .projects__dot {
+        display: flex;
+        align-items: center;
+        padding: 18px 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+    }
+
+    .projects__dot[hidden] {
+        display: none;
+    }
+
+    .projects__dot-bar {
+        display: block;
+        width: 12px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--color-border);
+        transition: width 0.3s, background-color 0.3s;
+    }
+
+    .projects__dot--active .projects__dot-bar {
+        width: 28px;
+        background: var(--color-yellow);
+    }
+
+    @media (min-width: 700px) {
+        .projects__slide {
+            flex-basis: calc((100% - 24px) / 2);
+        }
+    }
+</style>
